@@ -3,6 +3,7 @@ package com.example.ez_door_bluetooth;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //check if bluetooth is available
-        if(mBlueAdapter == null) mStatusBlueTv.setText("Bluetooth is not available");
+        if(mBlueAdapter == null){
+            mStatusBlueTv.setText("Bluetooth is not available");
+            mBlueIv.setImageResource(R.drawable.ic_action_off);
+            return;
+        }
         else mStatusBlueTv.setText("Bluetooth is available");
 
         //set image according to bluetooth status(on/off)
@@ -71,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
+                if(!mBlueAdapter.isDiscovering()){
+
+                    Toast.makeText(getApplicationContext(), "Making your device discoverable", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                    startActivityForResult(intent, REQUEST_DISCOVER_BT);
+
+                }
+
             }
         });
 
@@ -79,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
+                if(!mBlueAdapter.isEnabled()){
+
+                    mBlueAdapter.disable();
+                    Toast.makeText(getApplicationContext(), "Turning bluetooth off", Toast.LENGTH_SHORT).show();
+                    mBlueIv.setImageResource(R.drawable.ic_action_off);
+
+                }
+                else Toast.makeText(getApplicationContext(), "Bluetooth is already disabled", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -86,6 +110,20 @@ public class MainActivity extends AppCompatActivity {
         mPairedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
+
+                if(mBlueAdapter.isEnabled()){
+
+                    mPairedTv.setText("Paired Devices");
+                    Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
+                    for(BluetoothDevice device: devices){
+
+                        mPairedTv.append("\nDevice" + device.getName() + "," + device);
+
+                    }
+
+                }
+                //bluetooth is off so cannot get paired devices
+                else Toast.makeText(getApplicationContext(), "Turn on bluetooth to get paired devices", Toast.LENGTH_SHORT).show();
 
             }
         });
