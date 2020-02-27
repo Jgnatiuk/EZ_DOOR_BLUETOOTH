@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     //intent to on bluetooth
                     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(intent, REQUEST_ENABLE_BT);
+                    mBlueAdapter.enable();
 
                 }
                 else Toast.makeText(getApplicationContext(), "Bluetooth is already turned on", Toast.LENGTH_SHORT).show();
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                if(!mBlueAdapter.isEnabled()){
+                if(mBlueAdapter.isEnabled()){
 
                     mBlueAdapter.disable();
                     Toast.makeText(getApplicationContext(), "Turning bluetooth off", Toast.LENGTH_SHORT).show();
