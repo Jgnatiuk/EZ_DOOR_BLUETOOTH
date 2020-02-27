@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter mBlueAdapter;
 
+    // TEST FOR COMMIT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
