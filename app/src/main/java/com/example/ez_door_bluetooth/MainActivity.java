@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                     //intent to on bluetooth
                     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(intent, REQUEST_ENABLE_BT);
-                    mBlueAdapter.enable();
 
                 }
                 else Toast.makeText(getApplicationContext(), "Bluetooth is already turned on", Toast.LENGTH_SHORT).show();
@@ -138,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_ENABLE_BT:
                 if(resultCode == RESULT_OK){
                     //bluetooth is on
+                    mBlueAdapter.enable();
                     mBlueIv.setImageResource(R.drawable.ic_action_on);
                     Toast.makeText(getApplicationContext(), "Bluetooth is on", Toast.LENGTH_SHORT).show();
                 }
